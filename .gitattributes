@@ -1,0 +1,2 @@
+﻿financial/dailychart.csv filter=lfs diff=lfs merge=lfs -text
+data/dailychart.csv filter=lfs diff=lfs merge=lfs -text
