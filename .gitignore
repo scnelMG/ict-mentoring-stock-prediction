@@ -1,0 +1,57 @@
+# Public portfolio allowlist.
+# The original workspace is preserved locally, but only curated/public files are
+# tracked by default to avoid committing personal documents, credentials, raw
+# notebooks, executables, or large generated artifacts by accident.
+
+*
+
+!.gitignore
+!.gitattributes
+!.env.example
+!README.md
+!requirements.txt
+
+!src/
+!src/**
+
+!docs/
+!docs/**
+
+!notebooks/
+!notebooks/**
+
+!assets/
+!assets/**
+
+!data/
+!data/README.md
+!data/sample/
+!data/sample/**
+
+# Keep the full historical daily chart through Git LFS only.
+!financial/
+!financial/dailychart.csv
+
+# Local/private configuration and runtime artifacts stay ignored even if added
+# under public folders later.
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+*.exe
+*.dll
+*.lnk
+*.bat
+*.db
+*.sqlite
+*.sqlite3
+*.h5
+*.ckpt
+*.index
+*.data-00000-of-00001
+checkpoint
