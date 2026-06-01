@@ -76,6 +76,8 @@ Copy-Item .env.example .env
 
 ## 예시 이미지
 
+![GUI 전체 화면](assets/gui/gui_result_screen.png)
+
 ![뉴스 워드클라우드](assets/wordclouds/news_wordcloud_sample.png)
 
 ![GUI 차트 예시](assets/gui/top_chart_sample.png)
