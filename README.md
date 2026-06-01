@@ -76,10 +76,10 @@ Copy-Item .env.example .env
 
 ## 예시 이미지
 
-![GUI 전체 화면](assets/gui/gui_result_screen.png)
+아래 이미지는 프로젝트에서 직접 구현한 GUI 화면 자료와 뉴스 워드클라우드 결과입니다. 주식 표를 단순 캡처해 붙인 보조 이미지는 대표 이미지에서 제외했습니다.
+
+![GUI 화면](assets/gui/gui_wordcloud_section.png)
 
 ![뉴스 워드클라우드](assets/wordclouds/news_wordcloud_sample.png)
-
-![GUI 차트 예시](assets/gui/top_chart_sample.png)
 
 자세한 정리 기준은 [docs/project-summary.md](docs/project-summary.md)와 [docs/reproducibility.md](docs/reproducibility.md)를 참고하세요.
