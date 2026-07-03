@@ -28,9 +28,9 @@
 !data/sample/
 !data/sample/**
 
-# Keep the full historical daily chart through Git LFS only.
-!financial/
-!financial/dailychart.csv
+# Keep full historical daily charts local unless a cleaned sample is prepared.
+financial/
+financial/*.csv
 
 # Local/private configuration and runtime artifacts stay ignored even if added
 # under public folders later.
