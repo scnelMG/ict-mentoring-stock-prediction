@@ -1,54 +1,71 @@
-# ICT 멘토링 금융 상품 가격 예측 시스템
+# ICT Mentoring Stock Prediction System
 
-2022년 한이음 ICT 멘토링에서 진행한 금융 데이터 기반 가격 예측 프로젝트 기록입니다.
-주가 데이터 수집, 기술적 지표 생성, ARIMA/RNN/LSTM/GRU 실험, 뉴스 워드클라우드, PyQt GUI 구현 과정을 포트폴리오용으로 정리했습니다.
+Portfolio reconstruction of a 2022 Hanium ICT Mentoring project for stock-price data collection, feature engineering, recurrent model experiments, news keyword visualization, and a PyQt inspection GUI.
 
-## 프로젝트 개요
+This repository is meant to show the engineering shape of the system without requiring private credentials, the original team workspace, or raw financial datasets.
 
-- **주제**: 빅데이터와 딥러닝을 활용한 금융 상품 가격 예측 시스템
-- **기간**: 2022년 ICT 멘토링 수행 기록
-- **핵심 흐름**: 데이터 수집 -> 전처리/피처 엔지니어링 -> 예측 모델 실험 -> 뉴스 시각화 -> GUI 구현
-- **대표 종목**: 삼성전자, 삼성바이오로직스, 현대차, KB금융, SK, POSCO홀딩스, SK이노베이션, 한국전력, KT, CJ제일제당
+## Review Path
 
-## 기술 스택
+1. Start with this README for the system map, data policy, and reproduction limits.
+2. Read [docs/project-summary.md](docs/project-summary.md) for the project brief and contribution boundary.
+3. Read [docs/architecture.md](docs/architecture.md) for the data flow and component responsibilities.
+4. Read [docs/reproducibility.md](docs/reproducibility.md) before trying to run any command locally.
+5. Inspect `src/` for the public, cleaned implementation entry points.
 
-| 영역 | 사용 기술 |
+## Problem
+
+The project explored how Korean stock OHLCV data, technical indicators, and finance-news signals can be organized into a price-prediction workflow. The original mentoring deliverable combined data acquisition, database storage, model experimentation, keyword visualization, and a desktop GUI so a reviewer could inspect stock trends and prediction outputs.
+
+This public repo does not present the system as investment advice and does not claim production trading performance.
+
+## Role and Contribution
+
+The publishable work represented here covers:
+
+- Curating the original mentoring project into a reviewer-readable portfolio repository.
+- Refactoring representative implementation paths into `src/` instead of publishing the full historical workspace.
+- Documenting the data pipeline, environment variables, modeling approach, GUI boundary, and public/private data split.
+- Preserving safe sample data and screenshots while excluding personal, credential, and raw workspace material.
+
+The 2022 project was a mentoring/team project. This repository documents the implementation areas and artifacts available for public inspection, not sole authorship of every original file.
+
+## Tech Stack
+
+| Area | Tools |
 | --- | --- |
-| 데이터 수집 | Python, pandas, requests, BeautifulSoup, pykrx, Kiwoom OpenAPI |
-| 데이터 저장 | MySQL, SQLite, SQLAlchemy, PyMySQL |
-| 분석/모델링 | NumPy, scikit-learn, TensorFlow/Keras, ARIMA, RNN, LSTM, GRU, PCA |
-| 피처 엔지니어링 | 이동평균, 거래량 지표, 변동성 지표, 추세/모멘텀 지표, `ta` |
-| 시각화/앱 | matplotlib, mplfinance, wordcloud, KoNLPy, PyQt5 |
+| Data collection | Python, pandas, requests, BeautifulSoup, pykrx, Kiwoom OpenAPI context |
+| Storage | MySQL, SQLite, SQLAlchemy, PyMySQL |
+| Feature engineering | moving averages, volume/volatility/trend/momentum indicators, `ta` |
+| Modeling | NumPy, scikit-learn, PCA, TensorFlow/Keras, LSTM, GRU, historical ARIMA/RNN experiments |
+| News analysis | Naver Finance titles, KoNLPy/Okt, wordcloud |
+| GUI | PyQt5, Qt Designer `.ui` files from the original local project |
 
-## 저장소 구조
+## Architecture and Pipeline
 
 ```text
-.
-├── src/                 # 포트폴리오용으로 정리한 대표 Python 코드
-├── notebooks/           # 대표 노트북과 원본 실험 노트북 안내
-├── docs/                # 프로젝트 설명, 재현 방법, 공개 정책
-├── assets/              # 결과 이미지와 화면 자료
-├── data/                # 공개 가능한 데이터 안내 및 샘플 데이터 위치
-├── financial/           # 원본 개발/실험 파일은 로컬 보존, 공개 Git 추적은 제한
-├── 22_hf352-master/     # 주차별 원본 실험 기록은 로컬 보존
-└── archive/             # 공개 제외 또는 원본 보존용 로컬 자료
+External market/news sources
+  -> data collection (`src/data_collection.py`)
+  -> normalized OHLCV storage (`src/database.py`)
+  -> technical indicators (`src/features.py`)
+  -> PCA + sequence dataset (`src/modeling.py`)
+  -> LSTM/GRU training experiments
+  -> news keyword counts + wordcloud (`src/news_wordcloud.py`)
+  -> PyQt inspection shell (`src/app_main.py`)
 ```
 
-## 대표 코드
+Important source entry points:
 
-공개용 코드는 원본 실험 파일을 그대로 덮어쓰지 않고 `src/`에 읽기 좋은 형태로 정리했습니다.
+- `src/config.py`: stock-code map, safe path helpers, and environment-variable based database settings.
+- `src/data_collection.py`: KRX, PyKrx, Naver daily price, and Naver Finance news-title collection helpers.
+- `src/database.py`: MySQL connection, OHLCV normalization, table creation, storage, and loading utilities.
+- `src/features.py`: moving average and technical-indicator generation for model inputs.
+- `src/modeling.py`: deterministic seed setup, PCA reduction, sequence dataset construction, and compact LSTM/GRU models.
+- `src/news_wordcloud.py`: Korean noun extraction and wordcloud generation from recent finance-news titles.
+- `src/app_main.py`: minimal PyQt entry point that loads the historical Qt Designer UI file when it exists locally.
 
-- `src/config.py`: 종목 코드, 경로, DB 환경변수 설정
-- `src/data_collection.py`: KRX/네이버 금융 데이터 수집
-- `src/database.py`: MySQL 저장/조회와 OHLCV 정규화
-- `src/features.py`: 이동평균과 기술적 지표 생성
-- `src/modeling.py`: PCA, 시퀀스 데이터셋, LSTM/GRU 모델 구성
-- `src/news_wordcloud.py`: 금융 뉴스 제목 수집과 워드클라우드 생성
-- `src/app_main.py`: PyQt GUI 실행 진입점
+## Setup and Environment
 
-## 실행 참고
-
-이 프로젝트는 과거 팀 개발 환경에 의존하는 부분이 있습니다. 특히 Kiwoom OpenAPI, MySQL DB, KoNLPy, PyQt UI 파일은 로컬 설정이 필요합니다.
+The safe local setup path is:
 
 ```powershell
 python -m venv .venv
@@ -57,29 +74,65 @@ pip install -r requirements.txt
 Copy-Item .env.example .env
 ```
 
-`.env`에는 실제 DB 접속정보를 넣되 Git에는 커밋하지 않습니다.
+The `.env.example` file intentionally contains variable names and dummy placeholders only. Real database values must stay in `.env`, which is ignored by Git.
 
-## 공개용 정리 기준
+Key variables:
 
-- 노출되어 있던 DB 비밀번호와 원격 DB 주소는 공개 코드에서 제거했습니다.
-- 개인 신청서, 카카오톡 캡처, 실행 파일, IDE 설정, 중복 압축 파일은 Git 추적에서 제외했습니다.
-- 100MB를 넘는 `financial/dailychart.csv`는 GitHub 일반 Git 제한 때문에 Git LFS 대상으로 지정했습니다.
-- 원본 실험 기록은 로컬에 보존하되, 포트폴리오에서 읽을 대표 구현은 `src/`와 `notebooks/`에 따로 정리했습니다.
+| Variable | Purpose | Public value policy |
+| --- | --- | --- |
+| `STOCK_DB_HOST` | Local or private MySQL host | use `localhost` in examples |
+| `STOCK_DB_PORT` | MySQL port | safe numeric placeholder |
+| `STOCK_DB_USER` | MySQL user | dummy local username only |
+| `STOCK_DB_PASSWORD` | MySQL password | placeholder only, never a real secret |
+| `STOCK_DB_NAME` | MySQL database | dummy database name |
+| `STOCK_DATA_DIR` | CSV/sample data root | defaults to `data/sample` for public inspection |
+| `NEWS_WORDCLOUD_DIR` | output directory for generated wordclouds | defaults to `assets` |
 
-## 결과물
+## Data and Public-Safety Policy
 
-- 주가 데이터 수집 및 DB 적재 스크립트
-- ARIMA/RNN/LSTM/GRU 기반 주가 예측 실험
-- PCA와 기술적 지표를 활용한 피처 구성
-- 금융 뉴스 제목 기반 워드클라우드
-- PyQt 기반 예측 결과 조회 GUI
+Publicly inspectable data is limited to small sample CSVs under `data/sample/` and curated images under `assets/`.
 
-## 예시 이미지
+Excluded from the portfolio surface:
 
-아래 이미지는 프로젝트에서 직접 구현한 GUI 화면 자료와 뉴스 워드클라우드 결과입니다. 주식 표를 단순 캡처해 붙인 보조 이미지는 대표 이미지에서 제외했습니다.
+- Real `.env` files, database passwords, remote database hosts, API keys, and credential material.
+- Personal/team screenshots, KakaoTalk captures, application forms, HWP reports, IDE settings, executables, and duplicate archives.
+- Raw local workspace folders and unrestricted financial datasets that are unnecessary for a public reviewer.
+- Any Drive report contents that contain names, teammate information, personal screenshots, or redistribution-sensitive material.
 
-![GUI 화면](assets/gui/gui_wordcloud_section.png)
+`financial/dailychart.csv` is tracked through Git LFS because it is large historical market data. It is not required for the README review path and should not be modified during documentation-only portfolio cleanup.
 
-![뉴스 워드클라우드](assets/wordclouds/news_wordcloud_sample.png)
+## Reproduce or Inspect
 
-자세한 정리 기준은 [docs/project-summary.md](docs/project-summary.md)와 [docs/reproducibility.md](docs/reproducibility.md)를 참고하세요.
+Recommended public inspection path:
+
+```powershell
+python -m compileall src
+python -m src.news_wordcloud
+```
+
+`python -m src.news_wordcloud` requires network access to Naver Finance plus a working KoNLPy/Java environment. The generated output path is printed by the script.
+
+`python -m src.app_main` is an inspection path for the GUI shell, but it requires the historical `financial/qt_design/main_window.ui` file and a desktop environment with PyQt5 installed.
+
+Full end-to-end model reproduction is intentionally limited because the original MySQL database, Kiwoom/OpenAPI setup, local UI files, and parts of the historical experiment workspace are not public-safe or not portable.
+
+## Evidence and Results
+
+Inspectable artifacts in this repo:
+
+- Cleaned representative source code under `src/`.
+- Notebook review guide under `notebooks/README.md`.
+- Safe sample data under `data/sample/`.
+- GUI and wordcloud screenshots under `assets/`.
+- Project and reproducibility documentation under `docs/`.
+
+The repository does not publish a final verified trading metric. Historical ARIMA/RNN/LSTM/GRU experiments are documented as project work, but public reproduction is constrained by data and environment limits.
+
+## Limitations
+
+- This is a portfolio reconstruction of a 2022 mentoring project, not a maintained trading product.
+- Stock prices are volatile and the models here must not be used for financial advice.
+- Network crawlers can break when external websites change markup or access rules.
+- Kiwoom OpenAPI and some PyQt UI paths are Windows/local-environment dependent.
+- KoNLPy/Okt can require local Java and Korean font setup.
+- Full model results are not independently reproducible from a clean public checkout without the excluded original data and database environment.
