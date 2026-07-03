@@ -74,6 +74,12 @@ pip install -r requirements.txt
 - `docs/architecture.md`의 시스템 흐름
 - `notebooks/README.md`의 실험 기록 안내
 
+빠른 검증:
+
+```bash
+python scripts/verify_portfolio.py
+```
+
 제외된 것:
 
 - 원본 OHLCV/뉴스 데이터와 로컬 DB
