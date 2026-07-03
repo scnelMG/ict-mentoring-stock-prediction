@@ -1,138 +1,91 @@
-# ICT Mentoring Stock Prediction System
+# ICT 멘토링 주가 예측 시스템
 
-Portfolio reconstruction of a 2022 Hanium ICT Mentoring project for stock-price data collection, feature engineering, recurrent model experiments, news keyword visualization, and a PyQt inspection GUI.
+> 국내 주식 OHLCV, 기술 지표, 뉴스 키워드, 순환신경망 실험, PyQt GUI를 결합한 2022 한이음 ICT 멘토링 프로젝트입니다.
 
-This repository is meant to show the engineering shape of the system without requiring private credentials, the original team workspace, or raw financial datasets.
+[![Python](https://img.shields.io/badge/Python-Data%20Pipeline-3776AB?logo=python&logoColor=white)](src)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM%2FGRU-FF6F00?logo=tensorflow&logoColor=white)](docs/architecture.md)
+[![PyQt](https://img.shields.io/badge/PyQt-Desktop%20GUI-41CD52)](docs/project-summary.md)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Reconstructed-2ea44f)](docs/reproducibility.md)
 
-## Review Path
+## 개요
 
-1. Start with this README for the system map, data policy, and reproduction limits.
-2. Read [docs/project-summary.md](docs/project-summary.md) for the project brief and contribution boundary.
-3. Read [docs/architecture.md](docs/architecture.md) for the data flow and component responsibilities.
-4. Read [docs/reproducibility.md](docs/reproducibility.md) before trying to run any command locally.
-5. Inspect `src/` for the public, cleaned implementation entry points.
+이 저장소는 2022 한이음 ICT 멘토링 주가 예측 프로젝트를 포트폴리오 검토용으로 재구성한 버전입니다. 원본 팀 작업 공간 전체를 공개하는 대신, 데이터 수집, 지표 생성, 모델링, 뉴스 키워드 분석, GUI 구조를 이해할 수 있는 안전한 코드와 문서만 남겼습니다.
 
-## Problem
+이 프로젝트는 투자 조언이나 실거래 시스템이 아니며, 공개 README는 실무자가 기술 구조와 판단 근거를 빠르게 검토할 수 있도록 작성했습니다.
 
-The project explored how Korean stock OHLCV data, technical indicators, and finance-news signals can be organized into a price-prediction workflow. The original mentoring deliverable combined data acquisition, database storage, model experimentation, keyword visualization, and a desktop GUI so a reviewer could inspect stock trends and prediction outputs.
+## 빠른 검토 경로
 
-This public repo does not present the system as investment advice and does not claim production trading performance.
-
-## Role and Contribution
-
-The publishable work represented here covers:
-
-- Curating the original mentoring project into a reviewer-readable portfolio repository.
-- Refactoring representative implementation paths into `src/` instead of publishing the full historical workspace.
-- Documenting the data pipeline, environment variables, modeling approach, GUI boundary, and public/private data split.
-- Preserving safe sample data and screenshots while excluding personal, credential, and raw workspace material.
-
-The 2022 project was a mentoring/team project. This repository documents the implementation areas and artifacts available for public inspection, not sole authorship of every original file.
-
-## Tech Stack
-
-| Area | Tools |
+| 먼저 볼 것 | 확인할 내용 |
 | --- | --- |
-| Data collection | Python, pandas, requests, BeautifulSoup, pykrx, Kiwoom OpenAPI context |
-| Storage | MySQL, SQLite, SQLAlchemy, PyMySQL |
-| Feature engineering | moving averages, volume/volatility/trend/momentum indicators, `ta` |
-| Modeling | NumPy, scikit-learn, PCA, TensorFlow/Keras, LSTM, GRU, historical ARIMA/RNN experiments |
-| News analysis | Naver Finance titles, KoNLPy/Okt, wordcloud |
-| GUI | PyQt5, Qt Designer `.ui` files from the original local project |
+| [docs/project-summary.md](docs/project-summary.md) | 프로젝트 목적, 역할 범위, 공개/비공개 경계 |
+| [docs/architecture.md](docs/architecture.md) | 데이터 수집부터 GUI까지의 시스템 구조 |
+| [docs/reproducibility.md](docs/reproducibility.md) | 실행 가능 범위와 필요한 환경 변수 |
+| [docs/publication-checklist.md](docs/publication-checklist.md) | 공개 전 확인한 안전성 항목 |
+| [src/](src/) | 정리된 대표 구현 코드 |
 
-## Architecture and Pipeline
+## 문제 정의
 
-```text
-External market/news sources
-  -> data collection (`src/data_collection.py`)
-  -> normalized OHLCV storage (`src/database.py`)
-  -> technical indicators (`src/features.py`)
-  -> PCA + sequence dataset (`src/modeling.py`)
-  -> LSTM/GRU training experiments
-  -> news keyword counts + wordcloud (`src/news_wordcloud.py`)
-  -> PyQt inspection shell (`src/app_main.py`)
-```
+국내 주식 가격 예측 실험은 데이터 수집, 지표 생성, 모델 검증, 시각화, 사용자 확인 화면이 함께 필요합니다. 이 프로젝트는 OHLCV 데이터와 기술 지표, 금융 뉴스 키워드를 모아 예측 실험과 GUI 검토 화면까지 연결하는 구조를 탐색했습니다.
 
-Important source entry points:
+## 내 역할
 
-- `src/config.py`: stock-code map, safe path helpers, and environment-variable based database settings.
-- `src/data_collection.py`: KRX, PyKrx, Naver daily price, and Naver Finance news-title collection helpers.
-- `src/database.py`: MySQL connection, OHLCV normalization, table creation, storage, and loading utilities.
-- `src/features.py`: moving average and technical-indicator generation for model inputs.
-- `src/modeling.py`: deterministic seed setup, PCA reduction, sequence dataset construction, and compact LSTM/GRU models.
-- `src/news_wordcloud.py`: Korean noun extraction and wordcloud generation from recent finance-news titles.
-- `src/app_main.py`: minimal PyQt entry point that loads the historical Qt Designer UI file when it exists locally.
+팀 프로젝트 산출물이며, 이 저장소에서는 다음 기여를 공개 가능한 범위로 정리했습니다.
 
-## Setup and Environment
+- 원본 멘토링 산출물을 포트폴리오용 구조로 재정리
+- 데이터 수집, 저장, feature engineering, sequence modeling 흐름 문서화
+- `src/`에 대표 구현 경로를 분리해 reviewer가 읽기 쉬운 구조로 개선
+- raw financial data, credential, 개인/팀 작업물, 대용량 로컬 자료 제외
 
-The safe local setup path is:
+## 기술적 의사결정
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\activate
-pip install -r requirements.txt
-Copy-Item .env.example .env
-```
-
-The `.env.example` file intentionally contains variable names and dummy placeholders only. Real database values must stay in `.env`, which is ignored by Git.
-
-Key variables:
-
-| Variable | Purpose | Public value policy |
+| 영역 | 선택 | 이유 |
 | --- | --- | --- |
-| `STOCK_DB_HOST` | Local or private MySQL host | use `localhost` in examples |
-| `STOCK_DB_PORT` | MySQL port | safe numeric placeholder |
-| `STOCK_DB_USER` | MySQL user | dummy local username only |
-| `STOCK_DB_PASSWORD` | MySQL password | placeholder only, never a real secret |
-| `STOCK_DB_NAME` | MySQL database | dummy database name |
-| `STOCK_DATA_DIR` | CSV/sample data root | defaults to `data/sample` for public inspection |
-| `NEWS_WORDCLOUD_DIR` | output directory for generated wordclouds | defaults to `assets` |
+| 데이터 수집 | pykrx, requests, BeautifulSoup, Kiwoom OpenAPI 맥락 | 국내 주식 OHLCV와 뉴스 데이터를 함께 다루기 위한 구성입니다. |
+| 저장 | MySQL, SQLite, SQLAlchemy | 실험/GUI에서 반복 조회 가능한 형태로 데이터를 정규화하기 위함입니다. |
+| feature engineering | 이동평균, 변동성, 거래량, 모멘텀 지표 | 시계열 가격만 쓰는 모델보다 설명 가능한 입력을 구성하기 위함입니다. |
+| 모델링 | PCA, LSTM, GRU, Keras | 다변량 sequence input을 다루는 recurrent model 실험을 진행했습니다. |
+| UI | PyQt5 | 비개발자도 종목 흐름과 예측 결과를 확인할 수 있는 데스크톱 화면을 목표로 했습니다. |
 
-## Data and Public-Safety Policy
+## 아키텍처
 
-Publicly inspectable data is limited to small sample CSVs under `data/sample/` and curated images under `assets/`.
-
-Excluded from the portfolio surface:
-
-- Real `.env` files, database passwords, remote database hosts, API keys, and credential material.
-- Personal/team screenshots, KakaoTalk captures, application forms, HWP reports, IDE settings, executables, and duplicate archives.
-- Raw local workspace folders and unrestricted financial datasets that are unnecessary for a public reviewer.
-- Any Drive report contents that contain names, teammate information, personal screenshots, or redistribution-sensitive material.
-
-`financial/dailychart.csv` is tracked through Git LFS because it is large historical market data. It is not required for the README review path and should not be modified during documentation-only portfolio cleanup.
-
-## Reproduce or Inspect
-
-Recommended public inspection path:
-
-```powershell
-python -m compileall src
-python -m src.news_wordcloud
+```mermaid
+flowchart LR
+    A["시장/뉴스 데이터"] --> B["데이터 수집"]
+    B --> C["DB 저장"]
+    C --> D["기술 지표 생성"]
+    D --> E["PCA / sequence dataset"]
+    E --> F["LSTM / GRU 실험"]
+    C --> G["뉴스 키워드 분석"]
+    F --> H["PyQt 검토 GUI"]
+    G --> H
 ```
 
-`python -m src.news_wordcloud` requires network access to Naver Finance plus a working KoNLPy/Java environment. The generated output path is printed by the script.
+## 재현 가능성
 
-`python -m src.app_main` is an inspection path for the GUI shell, but it requires the historical `financial/qt_design/main_window.ui` file and a desktop environment with PyQt5 installed.
+공개 저장소는 inspection-first입니다. 원본 금융 데이터, API credential, 로컬 DB, GUI 실행 환경이 제외되어 clean checkout만으로 완전 재현되지는 않습니다.
 
-Full end-to-end model reproduction is intentionally limited because the original MySQL database, Kiwoom/OpenAPI setup, local UI files, and parts of the historical experiment workspace are not public-safe or not portable.
+```bash
+pip install -r requirements.txt
+```
 
-## Evidence and Results
+검토 가능한 것:
 
-Inspectable artifacts in this repo:
+- `src/`의 데이터 처리와 모델링 구조
+- `docs/architecture.md`의 시스템 흐름
+- `notebooks/README.md`의 실험 기록 안내
 
-- Cleaned representative source code under `src/`.
-- Notebook review guide under `notebooks/README.md`.
-- Safe sample data under `data/sample/`.
-- GUI and wordcloud screenshots under `assets/`.
-- Project and reproducibility documentation under `docs/`.
+제외된 것:
 
-The repository does not publish a final verified trading metric. Historical ARIMA/RNN/LSTM/GRU experiments are documented as project work, but public reproduction is constrained by data and environment limits.
+- 원본 OHLCV/뉴스 데이터와 로컬 DB
+- API key, 증권사 OpenAPI credential, 개인 설정 파일
+- 팀 내부 workspace, raw artifact, 대용량 중간 산출물
 
-## Limitations
+## 공개/비공개 경계
 
-- This is a portfolio reconstruction of a 2022 mentoring project, not a maintained trading product.
-- Stock prices are volatile and the models here must not be used for financial advice.
-- Network crawlers can break when external websites change markup or access rules.
-- Kiwoom OpenAPI and some PyQt UI paths are Windows/local-environment dependent.
-- KoNLPy/Okt can require local Java and Korean font setup.
-- Full model results are not independently reproducible from a clean public checkout without the excluded original data and database environment.
+이 저장소는 프로젝트의 engineering shape를 보여주는 목적입니다. 개인 credential, raw financial dataset, 투자 판단에 영향을 줄 수 있는 비검증 데이터, 팀 내부 문서는 공개하지 않습니다.
+
+## 한계
+
+- 실거래, 투자 추천, 수익률 보장을 위한 시스템이 아닙니다.
+- 원본 실행 환경이 오래되어 일부 GUI/DB 경로는 그대로 실행되지 않을 수 있습니다.
+- 모델 성능보다 데이터 파이프라인과 시스템 구성 경험을 보여주는 포트폴리오 성격이 강합니다.
