@@ -1,4 +1,10 @@
+<p align="center">
+  <img src="assets/gui/gui_wordcloud_section.png" alt="ICT 멘토링 주가 예측 시스템 실제 GUI 결과" width="720" />
+</p>
+
 # ICT 멘토링 주가 예측 시스템
+
+<p align="center">ICT 멘토링 · 금융 시계열 예측 · ARIMA · LSTM · GRU · Python GUI</p>
 
 > 국내 주식 OHLCV, 기술 지표, 뉴스 키워드, 순환신경망 실험, PyQt GUI를 결합한 2022 한이음 ICT 멘토링 프로젝트입니다.
 
