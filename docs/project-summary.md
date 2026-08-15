@@ -15,7 +15,7 @@ The public repository represents these contribution areas:
 - Data collection and normalization paths for KRX/PyKrx/Naver Finance data.
 - MySQL-oriented storage utilities with credentials moved to environment variables.
 - Feature engineering for moving averages and technical indicators.
-- PCA-based feature reduction and LSTM/GRU sequence-model helpers.
+- Korean/English OHLCV schema normalization plus training-period-only PCA and LSTM/GRU sequence-model helpers.
 - Finance-news title collection and Korean noun wordcloud generation.
 - PyQt GUI entry-point documentation and safe screenshot curation.
 - Publication cleanup that excludes credentials, personal/team files, and raw workspace material.
@@ -27,7 +27,7 @@ Because the project came from a mentoring/team context, the repo describes the i
 1. Collect stock codes, OHLCV rows, and finance-news titles from external sources.
 2. Normalize OHLCV columns and optionally persist them to MySQL.
 3. Build technical indicators across moving-average, volume, volatility, trend, and momentum families.
-4. Scale features, reduce non-target features with PCA, and construct fixed-window sequence datasets.
+4. Fit scalers and PCA on the training period only, then construct fixed-window sequence datasets in chronological order.
 5. Train compact recurrent models such as LSTM or GRU with early stopping.
 6. Generate wordcloud images from recent Naver Finance titles.
 7. Load the historical Qt Designer UI when local GUI files are present.
@@ -54,4 +54,4 @@ The project is partially reproducible. Source files can be compiled and inspecte
 - The repo is for portfolio inspection and engineering review, not investment decision support.
 - No publishable, independently verified final trading metric is claimed.
 - External crawling and market-data APIs may change behavior over time.
-- Historical notebooks may assume local paths from the original 2022 workspace.
+- 공개 노트북은 코드 진입점과 공개 범위만 안내하며, 원본 2022 작업 공간의 로컬 경로는 포함하지 않습니다.

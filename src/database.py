@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from typing import Literal
 
 import pandas as pd
 import pymysql
@@ -10,9 +11,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
 from .config import DatabaseConfig
-
-
-PRICE_COLUMNS = ["date", "open", "high", "low", "close", "volume"]
+from .ohlcv import normalize_price_frame
 
 
 def create_mysql_connection(config: DatabaseConfig | None = None):
@@ -23,7 +22,7 @@ def create_mysql_connection(config: DatabaseConfig | None = None):
         host=config.host,
         user=config.user,
         password=config.password,
-        db=config.database,
+        database=config.database,
         port=config.port,
         use_unicode=True,
         charset="utf8",
@@ -37,11 +36,16 @@ def create_sqlalchemy_engine(config: DatabaseConfig | None = None) -> Engine:
     return create_engine(config.sqlalchemy_url)
 
 
+def _quote_mysql_identifier(identifier: str) -> str:
+    return f"`{identifier.replace('`', '``')}`"
+
+
 def create_price_table(table_name: str, config: DatabaseConfig | None = None) -> None:
     """Create a stock price table if it does not exist."""
 
+    quoted_table_name = _quote_mysql_identifier(table_name)
     sql = f"""
-    CREATE TABLE IF NOT EXISTS `{table_name}` (
+    CREATE TABLE IF NOT EXISTS {quoted_table_name} (
         date INT NOT NULL PRIMARY KEY,
         open INT,
         high INT,
@@ -60,7 +64,7 @@ def save_price_frame(
     frame: pd.DataFrame,
     table_name: str,
     config: DatabaseConfig | None = None,
-    if_exists: str = "append",
+    if_exists: Literal["fail", "replace", "append", "delete_rows"] = "append",
 ) -> None:
     """Save a normalized OHLCV frame into MySQL."""
 
@@ -77,18 +81,6 @@ def load_price_frame(table_name: str, config: DatabaseConfig | None = None) -> p
     with engine.begin() as connection:
         frame = pd.read_sql_table(table_name, connection)
     return prepare_price_index(frame)
-
-
-def normalize_price_frame(frame: pd.DataFrame) -> pd.DataFrame:
-    """Normalize Korean/English OHLCV columns into the schema used by the DB."""
-
-    normalized = frame.copy()
-    if len(normalized.columns) >= len(PRICE_COLUMNS):
-        normalized = normalized.iloc[:, : len(PRICE_COLUMNS)]
-        normalized.columns = PRICE_COLUMNS
-    normalized["date"] = normalized["date"].astype(str).str.replace("-", "", regex=False)
-    normalized["date"] = normalized["date"].astype(int)
-    return normalized.sort_values("date")
 
 
 def prepare_price_index(frame: pd.DataFrame) -> pd.DataFrame:

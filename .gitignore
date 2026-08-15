@@ -28,6 +28,9 @@
 !data/sample/
 !data/sample/**
 
+!tests/
+!tests/**
+
 # Keep full historical daily charts local unless a cleaned sample is prepared.
 financial/
 financial/*.csv

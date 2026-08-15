@@ -45,10 +45,10 @@ def check_readme_markers() -> CheckResult:
     return CheckResult("README markers", True, "README includes review markers")
 
 
-def tracked_files() -> list[Path]:
+def public_files() -> list[Path]:
     try:
         completed = subprocess.run(
-            ["git", "ls-files"],
+            ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
             cwd=ROOT,
             check=True,
             capture_output=True,
@@ -61,22 +61,22 @@ def tracked_files() -> list[Path]:
     return [ROOT / line for line in completed.stdout.splitlines() if line]
 
 
-def check_tracked_file_sizes() -> CheckResult:
+def check_public_file_sizes() -> CheckResult:
     oversized = [
         path.relative_to(ROOT).as_posix()
-        for path in tracked_files()
+        for path in public_files()
         if path.exists() and path.stat().st_size > MAX_TRACKED_FILE_BYTES
     ]
     if oversized:
-        return CheckResult("tracked file size", False, ", ".join(oversized))
-    return CheckResult("tracked file size", True, "no tracked file exceeds 50MB")
+        return CheckResult("public file size", False, ", ".join(oversized))
+    return CheckResult("public file size", True, "no public file exceeds 50MB")
 
 
 def main() -> int:
     results = (
         check_required_paths(),
         check_readme_markers(),
-        check_tracked_file_sizes(),
+        check_public_file_sizes(),
     )
     for result in results:
         status = "PASS" if result.passed else "FAIL"

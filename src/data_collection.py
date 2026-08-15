@@ -11,8 +11,7 @@ from bs4 import BeautifulSoup
 from pykrx import stock
 
 from .config import STOCK_CODES
-from .database import normalize_price_frame
-
+from .ohlcv import normalize_price_frame
 
 KRX_CORP_LIST_URL = (
     "http://kind.krx.co.kr/corpgeneral/corpList.do"
@@ -69,7 +68,6 @@ def fetch_pykrx_ohlcv(
     start_text = _date_to_yyyymmdd(start)
     end_text = _date_to_yyyymmdd(end)
     frame = stock.get_market_ohlcv_by_date(start_text, end_text, ticker)
-    frame = frame.reset_index().iloc[:, :-2]
     return normalize_price_frame(frame)
 
 

@@ -22,9 +22,11 @@ KRX/PyKrx/Naver Finance
 | --- | --- | --- |
 | Configuration | `src/config.py` | Central stock-code list, project paths, data paths, and safe environment-variable based DB configuration. |
 | Collection | `src/data_collection.py` | KRX company-code lookup, PyKrx OHLCV collection, Naver daily price scraping, and Naver Finance title crawling. |
-| Storage | `src/database.py` | MySQL engine creation, OHLCV schema normalization, table creation, insert, and load helpers. |
+| OHLCV normalization | `src/ohlcv.py` | Korean/English OHLCV column aliases, date normalization, numeric conversion, and chronological ordering. |
+| Storage | `src/database.py` | MySQL engine creation, table creation, insert, and load helpers. |
 | Features | `src/features.py` | Moving averages plus volume, volatility, trend, and momentum indicators using `ta`. |
-| Modeling | `src/modeling.py` | Reproducible seed setup, PCA feature reduction, sequence dataset construction, and LSTM/GRU model helpers. |
+| Sequence preparation | `src/sequence_data.py` | Training-period-only scaler/PCA fitting and chronological train/test sequence windows. |
+| Modeling | `src/modeling.py` | Reproducible seed setup and LSTM/GRU training helpers. |
 | News visualization | `src/news_wordcloud.py` | Title cleaning, Korean noun extraction, keyword counts, and wordcloud image generation. |
 | GUI | `src/app_main.py` | Minimal PyQt entry point that loads the historical Qt Designer UI file when present locally. |
 
@@ -34,8 +36,8 @@ KRX/PyKrx/Naver Finance
 2. `normalize_price_frame()` standardizes Korean source columns into Date/Open/High/Low/Close/Volume style fields.
 3. `save_price_frame()` can persist each normalized frame to MySQL for local experiments.
 4. `build_model_frame()` enriches price rows with moving averages and technical indicators.
-5. `make_sequence_dataset()` scales/reduces features and creates train/test windows without shuffling time order.
-6. `train_model()` builds and trains a compact LSTM or GRU regression model with early stopping.
+5. `make_sequence_dataset()` fits the scaler and PCA only on the training period, then creates chronological train/test windows without shuffling time order.
+6. `train_model()` builds and trains a compact LSTM or GRU regression model; early stopping은 학습 구간의 마지막 20%만 사용하고, test 구간은 분리해 둡니다.
 7. `collect_recent_titles()` and `generate_wordcloud()` provide a separate news-keyword visualization path.
 
 ## Reproducibility Controls

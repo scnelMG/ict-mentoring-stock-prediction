@@ -7,10 +7,11 @@ runtime values from environment variables so credentials are never committed.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
+from sqlalchemy.engine import URL
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATA_DIR = PROJECT_ROOT / "data"
@@ -42,7 +43,7 @@ class DatabaseConfig:
     database: str
 
     @classmethod
-    def from_env(cls) -> "DatabaseConfig":
+    def from_env(cls) -> DatabaseConfig:
         return cls(
             host=os.getenv("STOCK_DB_HOST", "localhost"),
             port=int(os.getenv("STOCK_DB_PORT", "3306")),
@@ -53,10 +54,14 @@ class DatabaseConfig:
 
     @property
     def sqlalchemy_url(self) -> str:
-        return (
-            f"mysql+pymysql://{self.user}:{self.password}"
-            f"@{self.host}:{self.port}/{self.database}"
-        )
+        return URL.create(
+            "mysql+pymysql",
+            username=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port,
+            database=self.database,
+        ).render_as_string(hide_password=False)
 
 
 def data_dir() -> Path:
