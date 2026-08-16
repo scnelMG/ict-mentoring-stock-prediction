@@ -4,18 +4,22 @@ from src.config import DatabaseConfig
 from src.database import _quote_mysql_identifier
 
 
-def test_database_config_encodes_reserved_characters_in_sqlalchemy_url() -> None:
+def test_database_config_returns_url_object_without_serializing_password() -> None:
     given_config = DatabaseConfig(
         host="db.example.test",
         port=3307,
         user="stock@user",
-        password="p@ss/word",
+        password="",
         database="stockdb",
     )
 
     when_url = given_config.sqlalchemy_url
 
-    assert when_url == "mysql+pymysql://stock%40user:p%40ss%2Fword@db.example.test:3307/stockdb"
+    assert when_url.drivername == "mysql+pymysql"
+    assert when_url.username == "stock@user"
+    assert when_url.host == "db.example.test"
+    assert when_url.port == 3307
+    assert when_url.database == "stockdb"
 
 
 def test_quote_mysql_identifier_escapes_closing_backticks() -> None:

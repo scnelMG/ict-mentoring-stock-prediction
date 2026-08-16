@@ -53,7 +53,7 @@ class DatabaseConfig:
         )
 
     @property
-    def sqlalchemy_url(self) -> str:
+    def sqlalchemy_url(self) -> URL:
         return URL.create(
             "mysql+pymysql",
             username=self.user,
@@ -61,7 +61,7 @@ class DatabaseConfig:
             host=self.host,
             port=self.port,
             database=self.database,
-        ).render_as_string(hide_password=False)
+        )
 
 
 def data_dir() -> Path:
