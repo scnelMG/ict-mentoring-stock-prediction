@@ -18,14 +18,14 @@ Edit `.env` only on the local machine. Do not commit `.env`.
 ```text
 STOCK_DB_HOST=localhost
 STOCK_DB_PORT=3306
-STOCK_DB_USER=stock_user
-STOCK_DB_PASSWORD=__SET_LOCALLY_NOT_COMMITTED__
+STOCK_DB_USER=
+STOCK_DB_PASSWORD=
 STOCK_DB_NAME=stockdb
 STOCK_DATA_DIR=data/sample
 NEWS_WORDCLOUD_DIR=assets
 ```
 
-`STOCK_DB_PASSWORD` is an environment variable name, not a published credential. The value shown above is a dummy placeholder.
+`STOCK_DB_PASSWORD` is an environment variable name. Enter its value only in your local, untracked `.env` file.
 
 ## Verification Commands
 
