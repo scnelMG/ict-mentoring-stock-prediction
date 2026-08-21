@@ -76,11 +76,10 @@ flowchart LR
 ## 실제 구현 화면
 
 <p align="center">
-  <img src="assets/gui/gui_wordcloud_section.png" alt="종목 입력과 금융 상품 키워드 제공 화면" width="49%" />
-  <img src="assets/gui/wordcloud_ui_sample.png" alt="금융 뉴스 제목 기반 워드클라우드 결과" width="49%" />
+  <img src="assets/gui/gui_wordcloud_section.png" alt="종목 입력과 금융 상품 키워드 제공 화면" width="560" />
 </p>
 
-두 이미지는 2022년 원본 프로젝트 자료에서 선별한 실제 GUI·워드클라우드 결과입니다. 모델 성능을 과장하기 위한 자료가 아니라, 뉴스 키워드 확인 기능이 GUI에 연결된 흐름을 보여줍니다.
+2022년 원본 프로젝트에서 선별한 실제 GUI 화면입니다. 모델 성능을 과장하기 위한 자료가 아니라, 뉴스 키워드 확인 기능이 GUI에 연결된 흐름을 보여줍니다.
 
 ## 재현 가능성
 
