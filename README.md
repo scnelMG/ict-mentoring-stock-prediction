@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="assets/gui/gui_wordcloud_section.png" alt="ICT 멘토링 주가 예측 시스템 실제 GUI 결과" width="720" />
-</p>
-
 # ICT 멘토링 주가 예측 시스템
 
 <p align="center">ICT 멘토링 · 금융 시계열 예측 · ARIMA · LSTM · GRU · Python GUI</p>
@@ -40,26 +36,6 @@
 | 시계열 모델 실험 | 학습 구간에만 맞춘 스케일러·PCA, 고정 길이 시퀀스, LSTM·GRU, 학습 구간 내부 early stopping | [sequence_data.py](src/sequence_data.py) · [modeling.py](src/modeling.py) |
 | 뉴스 보조 분석 | 금융 뉴스 제목의 명사 추출과 워드클라우드 생성 | [news_wordcloud.py](src/news_wordcloud.py) |
 | 결과 확인 UI | 종목 검색과 키워드 결과 확인을 위한 PyQt 진입점 | [app_main.py](src/app_main.py) |
-
-## 공개 포트폴리오 버전
-
-이 저장소는 2022 한이음 ICT 멘토링 주가 예측 프로젝트를 포트폴리오 검토용으로 재구성한 버전입니다. 원본 팀 작업 공간 전체를 공개하는 대신, 데이터 수집, 지표 생성, 모델링, 뉴스 키워드 분석, GUI 구조를 이해할 수 있는 안전한 코드와 문서만 남겼습니다.
-
-이 프로젝트는 투자 조언이나 실거래 시스템이 아니며, 공개 README는 실무자가 기술 구조와 판단 근거를 빠르게 검토할 수 있도록 작성했습니다.
-
-## 빠른 검토 경로
-
-| 먼저 볼 것 | 확인할 내용 |
-| --- | --- |
-| [docs/project-summary.md](docs/project-summary.md) | 프로젝트 목적, 역할 범위, 공개/비공개 경계 |
-| [docs/architecture.md](docs/architecture.md) | 데이터 수집부터 GUI까지의 시스템 구조 |
-| [docs/reproducibility.md](docs/reproducibility.md) | 실행 가능 범위와 필요한 환경 변수 |
-| [docs/publication-checklist.md](docs/publication-checklist.md) | 공개 전 확인한 안전성 항목 |
-| [src/](src/) | 정리된 대표 구현 코드 |
-
-## 문제 정의
-
-국내 주식 가격 예측 실험은 데이터 수집, 지표 생성, 모델 검증, 시각화, 사용자 확인 화면이 함께 필요합니다. 이 프로젝트는 OHLCV 데이터와 기술 지표, 금융 뉴스 키워드를 모아 예측 실험과 GUI 검토 화면까지 연결하는 구조를 탐색했습니다.
 
 ## 내 역할
 
@@ -135,12 +111,8 @@ uv run --with pytest --with numpy --with pandas --with scikit-learn pytest tests
 
 모델 구조에는 시계열 순서를 보존한 train/test 분할이 구현되어 있지만, 원본 데이터와 당시 실험 설정이 공개되지 않아 독립적으로 재현된 최종 성능·수익률 지표는 제시하지 않습니다. 이 프로젝트는 투자 조언이나 수익률 보장을 위한 결과물이 아닙니다.
 
-## 공개/비공개 경계
+## 공개 범위와 한계
 
-이 저장소는 프로젝트의 engineering shape를 보여주는 목적입니다. 개인 credential, raw financial dataset, 투자 판단에 영향을 줄 수 있는 비검증 데이터, 팀 내부 문서는 공개하지 않습니다.
-
-## 한계
-
-- 실거래, 투자 추천, 수익률 보장을 위한 시스템이 아닙니다.
-- 원본 실행 환경이 오래되어 일부 GUI/DB 경로는 그대로 실행되지 않을 수 있습니다.
-- 모델 성능보다 데이터 파이프라인과 시스템 구성 경험을 보여주는 포트폴리오 성격이 강합니다.
+- 공개: 데이터 수집·정규화·모델링·GUI의 대표 구현과 실제 화면
+- 제외: 원본 OHLCV·뉴스 데이터, 로컬 DB, 비밀값, 팀 내부 자료
+- 이 프로젝트는 실거래·투자 추천·수익률 보장을 위한 시스템이 아닙니다. 원본 실행 환경이 오래되어 일부 GUI·DB 경로는 그대로 실행되지 않을 수 있습니다.
