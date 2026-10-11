@@ -10,6 +10,7 @@
 !.env.example
 !README.md
 !requirements.txt
+!requirements-test.txt
 
 !src/
 !src/**
