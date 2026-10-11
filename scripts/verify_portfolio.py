@@ -46,27 +46,24 @@ def check_readme_markers() -> CheckResult:
 
 
 def public_files() -> list[Path]:
-    try:
-        completed = subprocess.run(
-            ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
-            cwd=ROOT,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except FileNotFoundError:
-        return []
-    except subprocess.CalledProcessError:
-        return []
-    return [ROOT / line for line in completed.stdout.splitlines() if line]
+    completed = subprocess.run(
+        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    )
+    return [ROOT / name for name in completed.stdout.decode("utf-8").split("\0") if name]
 
 
 def check_public_file_sizes() -> CheckResult:
-    oversized = [
-        path.relative_to(ROOT).as_posix()
-        for path in public_files()
-        if path.exists() and path.stat().st_size > MAX_TRACKED_FILE_BYTES
-    ]
+    try:
+        oversized = [
+            path.relative_to(ROOT).as_posix()
+            for path in public_files()
+            if path.stat().st_size > MAX_TRACKED_FILE_BYTES
+        ]
+    except (OSError, subprocess.CalledProcessError, UnicodeError) as error:
+        return CheckResult("public file size", False, f"could not inspect files: {type(error).__name__}")
     if oversized:
         return CheckResult("public file size", False, ", ".join(oversized))
     return CheckResult("public file size", True, "no public file exceeds 50MB")
